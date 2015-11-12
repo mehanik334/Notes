@@ -11,36 +11,34 @@ import android.widget.TextView;
 import java.util.List;
 
 
-public class NotesAdapter extends ArrayAdapter<Person>
-{
+public class NotesAdapter extends ArrayAdapter<Person> {
 
     private Context context;
-    private List<Person>persons;
+    private List<Person> persons;
 
 
-
-
-
-
-    public NotesAdapter(Context context, int notes_item,List<Person> persons) {
-        super(context,R.layout.notes_item,persons);
-        this.context=context;
-        this.persons=persons;
+    public NotesAdapter(Context context, int notes_item, List<Person> persons) {
+        super(context, R.layout.notes_item, persons);
+        this.context = context;
+        this.persons = persons;
 
     }
 
 
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater= (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view=inflater.inflate(R.layout.notes_item,parent,false);
-        TextView namesView= (TextView) view.findViewById(R.id.name);
+
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.notes_item, parent, false);
+
+        ListView listView = (ListView) parent.findViewById(R.id.list);
+        TextView phoneView = (TextView) view.findViewById(R.id.tel);
+        TextView namesView = (TextView) view.findViewById(R.id.name);
+
         namesView.setText((persons.get(position)).getName());
-        ListView listView= (ListView) parent.findViewById(R.id.list);
-        TextView phoneView= (TextView) view.findViewById(R.id.tel);
         phoneView.setText((persons.get(position)).getNumberTelefon());
-        if(listView.isItemChecked(position)){
+
+        if (listView.isItemChecked(position)) {
             view.setBackgroundColor(inflater.getContext().getResources().getColor(R.color.blue));
         }
 
