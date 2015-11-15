@@ -2,6 +2,7 @@ package com.example.sasha.notes;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.TaskStackBuilder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -32,7 +33,15 @@ public class MainActivity extends Activity implements View.OnClickListener,MenuI
     private static ListView listView;
     private DataBaseHandler dbHandler;
     private AdapterView.AdapterContextMenuInfo contextMenuInfo;
+    public static final int DELETE_ID = 1;
+    public static final int REFACTOR_ID = 2;
+    public static final int SENT_ID = 3;
+    public static final int CALL_ID = 4;
 
+    @Override
+    public void onPrepareNavigateUpTaskStack(TaskStackBuilder builder) {
+        super.onPrepareNavigateUpTaskStack(builder);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,10 +81,10 @@ public class MainActivity extends Activity implements View.OnClickListener,MenuI
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         contextMenuInfo = (AdapterView.AdapterContextMenuInfo) menuInfo;
 
-        menu.add(0, 1, 0, "Delete").setOnMenuItemClickListener(this);
-        menu.add(0, 2, 0, "Refactor").setOnMenuItemClickListener(this);
-        menu.add(0, 3, 0, "Sent").setOnMenuItemClickListener(this);
-        menu.add(0, 4, 0, "Call").setOnMenuItemClickListener(this);
+        menu.add(0, DELETE_ID, 0, "Delete").setOnMenuItemClickListener(this);
+        menu.add(0, REFACTOR_ID, 0, "Refactor").setOnMenuItemClickListener(this);
+        menu.add(0, SENT_ID, 0, "Sent").setOnMenuItemClickListener(this);
+        menu.add(0, CALL_ID, 0, "Call").setOnMenuItemClickListener(this);
     }
 
 
@@ -133,16 +142,16 @@ public class MainActivity extends Activity implements View.OnClickListener,MenuI
         AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         Person per = persons.get(acmi.position);
         switch (item.getItemId()) {
-            case 1:
+            case DELETE_ID:
                 dbHandler.deletePerson(per);
                 persons.remove(acmi.position);
                 listView.setAdapter(new NotesAdapter(MainActivity.this, R.layout.notes_item, persons));
                 break;
-            case 2:
+            case REFACTOR_ID:
 
                 break;
 
-            case 3:
+            case SENT_ID:
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_SEND);
                 intent.putExtra(Intent.EXTRA_TEXT, per.toString());
@@ -150,7 +159,7 @@ public class MainActivity extends Activity implements View.OnClickListener,MenuI
                 startActivity(intent);
                 break;
 
-            case 4:
+            case CALL_ID:
                 Intent intentCall = new Intent(Intent.ACTION_DIAL);
                 intentCall.setData(Uri.parse("tel:" + per.getNumberTelefon()));
                 startActivity(intentCall);
